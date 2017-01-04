@@ -679,9 +679,14 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @return self
      */
     private function setRequestPath($path) {
+        $host = $this->request->getHeader('Host');
+
         // Resolve the path with the base_uri
         $uri = Psr7\Uri::resolve($this->client->getConfig('base_uri'), Psr7\uri_for($path));
         $this->request = $this->request->withUri($uri);
+
+        if (!empty($host[0]))
+            $this->request = $this->request->withHeader('Host', $host[0]);
 
         return $this;
     }
