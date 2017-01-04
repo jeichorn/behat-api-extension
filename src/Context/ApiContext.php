@@ -7,6 +7,7 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7;
 use Assert;
@@ -596,6 +597,8 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
                 $this->request,
                 $this->requestOptions
             );
+        } catch (ConnectException $e) {
+            $this->response = $e;
         } catch (RequestException $e) {
             $this->response = $e->getResponse();
 
