@@ -571,7 +571,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      *
      * @throws RequestException
      */
-    private function sendRequest() {
+    protected function sendRequest() {
         if (!empty($this->requestOptions['form_params'])) {
             $this->setRequestMethod('POST');
         }
@@ -685,7 +685,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @param string $path The path to request
      * @return self
      */
-    private function setRequestPath($path) {
+    protected function setRequestPath($path) {
         $host = $this->request->getHeader('Host');
 
         // Resolve the path with the base_uri
@@ -708,7 +708,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @param string $method The HTTP method
      * @return self
      */
-    private function setRequestMethod($method) {
+    protected function setRequestMethod($method) {
         $this->request = $this->request->withMethod($method);
 
         return $this;
@@ -721,7 +721,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @throws InvalidArgumentException
      * @return self
      */
-    private function setRequestBody($body) {
+    protected function setRequestBody($body) {
         if (!empty($this->requestOptions['multipart']) || !empty($this->requestOptions['form_params'])) {
             throw new InvalidArgumentException(
                 'It\'s not allowed to set a request body when using multipart/form-data or form parameters.'
@@ -740,7 +740,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @param mixed $value The value of the header
      * @return self
      */
-    private function addRequestHeader($header, $value) {
+    protected function addRequestHeader($header, $value) {
         $this->request = $this->request->withAddedHeader($header, $value);
 
         return $this;
@@ -753,7 +753,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
      * @param mixed $value The value of the header
      * @return self
      */
-    private function setRequestHeader($header, $value) {
+    protected function setRequestHeader($header, $value) {
         $this->request = $this->request->withHeader($header, $value);
 
         return $this;
