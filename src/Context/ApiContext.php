@@ -59,6 +59,13 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
     protected $response;
 
     /**
+     * Query string paramters to add to the uri when building it
+     *
+     * @var array
+	 */
+	protected $queryStringParameters = [];
+
+    /**
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
@@ -683,6 +690,10 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
 
         // Resolve the path with the base_uri
         $uri = Psr7\Uri::resolve($this->client->getConfig('base_uri'), Psr7\uri_for($path));
+
+        foreach($this->queryStringParameters as $key => $value) {
+            $uri = Psr7\Uri::withQueryValue($uri, $key, $value);
+        }
         $this->request = $this->request->withUri($uri);
 
         if (!empty($host[0]))
@@ -765,5 +776,13 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
         }
 
         return $body;
+    }
+
+    /**
+     * @Given the query string parameter :parameter is set to :value
+     */
+    public function theQueryStringParameterIsSetTo($parameter, $value)
+    {
+        $this->queryStringParameters[$parameter] = $value;
     }
 }
