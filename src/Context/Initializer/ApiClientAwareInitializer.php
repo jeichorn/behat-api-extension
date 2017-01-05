@@ -27,7 +27,7 @@ class ApiClientAwareInitializer implements ContextInitializer {
      * @throws RuntimeException
      */
     public function __construct(ClientInterface $client) {
-        $baseUri = $client->getConfig()['base_uri'];
+        $baseUri = \GuzzleHttp\Psr7\uri_for($client->getConfig()['_base_uri']);
         $host = $baseUri->getHost();
         $port = $baseUri->getPort() ?: ($baseUri->getScheme() === 'http' ? 80 : 443);
 

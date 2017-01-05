@@ -66,12 +66,20 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
 	protected $queryStringParameters = [];
 
     /**
+     * The base uri that will be used to resolve uris for requests
+     *
+     * @var Psr7\Uri
+     */
+    protected $baseUri;
+
+    /**
      * {@inheritdoc}
      * @codeCoverageIgnore
      */
     public function setClient(ClientInterface $client) {
         $this->client = $client;
-        $this->request = new Request('GET', $client->getConfig('base_uri'));
+        $this->baseUri = $client->getConfig('_base_uri');
+        $this->request = new Request('GET', $client->getConfig('_base_uri'));
     }
 
     /**
@@ -689,7 +697,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
         $host = $this->request->getHeader('Host');
 
         // Resolve the path with the base_uri
-        $uri = Psr7\Uri::resolve($this->client->getConfig('base_uri'), Psr7\uri_for($path));
+        $uri = Psr7\Uri::resolve($this->baseUri, Psr7\uri_for($path));
 
         foreach($this->queryStringParameters as $key => $value) {
             $uri = Psr7\Uri::withQueryValue($uri, $key, $value);

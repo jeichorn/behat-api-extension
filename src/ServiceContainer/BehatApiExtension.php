@@ -76,6 +76,8 @@ class BehatApiExtension implements ExtensionInterface {
      * @codeCoverageIgnore
      */
     public function load(ContainerBuilder $container, array $config) {
+        $config['_base_uri'] = $config['base_uri'];
+        unset($config['base_uri']);
         $definition = new Definition('GuzzleHttp\Client', [$config]);
         $container->setDefinition(self::CLIENT_SERVICE_ID, $definition);
 
