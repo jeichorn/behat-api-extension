@@ -697,7 +697,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
         $host = $this->request->getHeader('Host');
 
         // Resolve the path with the base_uri
-        $uri = Psr7\Uri::resolve($this->baseUri, Psr7\uri_for($path));
+        $uri = Psr7\Uri::resolve(Psr7\uri_for($this->baseUri), Psr7\uri_for($path));
 
         foreach($this->queryStringParameters as $key => $value) {
             $uri = Psr7\Uri::withQueryValue($uri, $key, $value);
