@@ -122,16 +122,27 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
     }
 
     /**
-     * Set a HTTP request header
+     * Add a HTTP request header
      *
      * If the header already exists it will be converted to an array
+     *
+     * @param string $header The header name
+     * @param string $value The header value
+     * @Given the :header request header contains :value
+     */
+    public function givenTheRequestHeaderContains($header, $value) {
+        $this->addRequestHeader($header, $value);
+    }
+
+    /**
+     * Set a HTTP request header
      *
      * @param string $header The header name
      * @param string $value The header value
      * @Given the :header request header is :value
      */
     public function givenTheRequestHeaderIs($header, $value) {
-        $this->addRequestHeader($header, $value);
+        $this->setRequestHeader($header, $value);
     }
 
     /**
@@ -424,13 +435,11 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
         $actual = $this->response->getHeaderLine($header);
 
         Assertion::same(
-            $actual,
             $value,
+            $actual,
             sprintf(
-                'Response header (%s) mismatch. Expected "%s", got "%s".',
-                $header,
-                $value,
-                $actual
+                'Response header (%s) mismatch. Expected "%%s", got "%%s".',
+                $header
             )
         );
     }
