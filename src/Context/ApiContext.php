@@ -617,6 +617,7 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
         }
 
         try {
+            $this->info = null;
             $this->response = $this->client->send(
                 $this->request,
                 $this->requestOptions
@@ -631,6 +632,19 @@ class ApiContext implements ApiClientAwareContext, SnippetAcceptingContext {
             }
         }
     }
+
+    protected $info;
+    protected function info()
+    {
+        if (empty($this->info))
+        {
+            $body = $this->response->getBody()->getContents();
+            $this->info = json_decode($body, true);
+        }
+        return $this->info;
+    }
+
+ 
 
     /**
      * Require a response object
